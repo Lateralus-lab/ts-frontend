@@ -6,7 +6,7 @@ type AlertProps = {
 const Alert = (props: AlertProps) => {
   const { message, variant } = props;
 
-  return (
+  const content = message ? (
     // <div className={`alert-${variant}`}>
     <div className="alert-danger">
       <svg
@@ -27,7 +27,9 @@ const Alert = (props: AlertProps) => {
         <span className="font-medium">{message}</span>
       </div>
     </div>
-  );
+  ) : null;
+
+  return content;
 };
 
 export default Alert;

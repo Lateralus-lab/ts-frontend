@@ -1,54 +1,14 @@
 import { FormEvent, useState } from "react";
 import { FaSignInAlt } from "react-icons/fa";
-import { useOutletContext, useNavigate } from "react-router-dom";
 import Input from "../components/Form/Input";
 import Alert from "../components/Alert";
-
-type IsError = {
-  isError: boolean;
-  setIsError: (isError: boolean) => void;
-};
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { setAccessToken } = useOutletContext<any>();
-  const { isError, setIsError } = useOutletContext<IsError>();
-  const { toggleRefresh } = useOutletContext<any>();
-
-  const navigate = useNavigate();
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    let payload = {
-      email,
-      password,
-    };
-
-    const requestOptions: any = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(payload),
-    };
-
-    fetch(`/authenticate`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          setIsError(true);
-        } else {
-          setAccessToken(data.access_token);
-          toggleRefresh(true);
-          navigate("/dashboard");
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        setIsError(true);
-      });
   };
 
   return (
@@ -89,9 +49,6 @@ const LoginPage = () => {
         <button className="btn" type="submit">
           Login
         </button>
-        {isError ? (
-          <Alert message={"Invalid credentials"} variant={"danger"} />
-        ) : null}
       </form>
     </div>
   );
