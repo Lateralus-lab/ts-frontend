@@ -1,4 +1,8 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import { setCredentials, logOut } from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
@@ -14,20 +18,28 @@ const baseQuery = fetchBaseQuery({
 });
 
 const getAccessToken = (data: string) => {
-  return data.match(/(?<=s_token":").+(?="(?=,))/);
+  var resultToken = data.match(/(?<=s_token":").+(?="(?=,))/)?.toString();
+  if (resultToken === undefined) return null;
+  return resultToken;
 };
 
-const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
+const baseQueryWithReauth = async (
+  args: string | FetchArgs,
+  api: any,
+  extraOptions: any
+) => {
+  console.log(typeof extraOptions);
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 403) {
+    console.log("403");
     // send refresh token to get a new access token
     const refreshResult = await baseQuery("/refresh", api, extraOptions);
     if (refreshResult?.data) {
-      const user = api.getState().auth.user;
+      const email = api.getState().auth.user;
       // set new access token
       var accessToken = getAccessToken(JSON.stringify(refreshResult.data));
-      api.dispatch(setCredentials({ accessToken, user }));
+      api.dispatch(setCredentials({ accessToken, email }));
       // retry original request
       result = await baseQuery(args, api, extraOptions);
     } else {

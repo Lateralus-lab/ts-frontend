@@ -1,7 +1,15 @@
-import { useGetEventsQuery } from "./manageEventsApiSlice";
+import { useGetManageEventsQuery } from "./manageEventsApiSlice";
 import { Link } from "react-router-dom";
 
 import Spinner from "../../components/Spinner";
+
+interface Events {
+  id: number;
+  title: string;
+  release_date: string;
+  runtime: number;
+  mpaa_rating: string;
+}
 
 const ManageEvents = () => {
   const {
@@ -10,7 +18,7 @@ const ManageEvents = () => {
     isSuccess,
     isError,
     error,
-  } = useGetEventsQuery(null);
+  } = useGetManageEventsQuery(null);
 
   let content: any;
 
@@ -43,7 +51,7 @@ const ManageEvents = () => {
               </tr>
             </thead>
             <tbody>
-              {events.map((e: any) => (
+              {events.map((e: Events) => (
                 <tr
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                   key={e.id}

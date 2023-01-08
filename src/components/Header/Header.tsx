@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 
-import { useSelector } from "react-redux";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 import {
   selectCurrentToken,
   selectCurrentUser,
@@ -9,10 +9,13 @@ import {
 import { useDispatch } from "react-redux";
 import { logOut } from "../../features/auth/authSlice";
 import { useLogOutMutation } from "../../features/auth/logoutApiSlice";
+import { RootState } from "../../app/store";
+
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const Header = () => {
-  const user = useSelector<string>(selectCurrentUser);
-  const token = useSelector<string>(selectCurrentToken);
+  const user = useTypedSelector(selectCurrentUser);
+  const token = useTypedSelector(selectCurrentToken);
 
   const [logOutMutation] = useLogOutMutation();
   const dispatch = useDispatch();

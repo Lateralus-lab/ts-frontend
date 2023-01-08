@@ -9,4 +9,5 @@ export const manageEventsApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetEventsQuery } = manageEventsApiSlice;
+export const { useGetEventsQuery: useGetManageEventsQuery } =
+  manageEventsApiSlice;
