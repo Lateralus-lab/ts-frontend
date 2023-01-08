@@ -7,13 +7,15 @@ import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../features/auth/authSlice";
 
 const Layout = () => {
-  const token = useSelector(selectCurrentToken);
+  const token = useSelector<string>(selectCurrentToken);
+
+  const showSidebar = !token ? null : <Sidebar />;
 
   return (
     <div className="max-w-screen-lg m-auto px-4">
       <Header />
       <div className="flex">
-        {!token ? null : <Sidebar />}
+        {showSidebar}
         <main className="w-full">
           <Outlet />
         </main>

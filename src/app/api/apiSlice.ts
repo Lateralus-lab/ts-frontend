@@ -14,7 +14,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 const getAccessToken = (data: string) => {
-  return data.match(/(?<=s_token\":\").+(?=\"(?=,))/);
+  return data.match(/(?<=s_token":").+(?="(?=,))/);
 };
 
 const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {

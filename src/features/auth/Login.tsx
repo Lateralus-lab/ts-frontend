@@ -11,8 +11,8 @@ import { setCredentials } from "./authSlice";
 import { useLoginMutation } from "./authApiSlice";
 
 const Login = () => {
-  const userRef = useRef<HTMLInputElement>(null);
-  const errRef = useRef<HTMLParagraphElement>(null);
+  const userRef = useRef<HTMLInputElement | null>(null);
+  const errRef = useRef<HTMLParagraphElement | null>(null);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>("");

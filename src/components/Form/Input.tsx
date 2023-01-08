@@ -1,6 +1,20 @@
-import { forwardRef } from "react";
+import { forwardRef, LegacyRef } from "react";
 
-const Input = forwardRef((props: any, ref: any) => {
+interface Props {
+  title?: string;
+  name?: string;
+  id?: string;
+  className: string;
+  type: string;
+  required: boolean;
+  placeholder: string;
+  errorMsg?: string;
+  value: string;
+  autoComplete?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Input = forwardRef((props: Props, ref: LegacyRef<HTMLInputElement>) => {
   return (
     <div className="mb-3">
       <label
