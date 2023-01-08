@@ -3,10 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./assets/css/styles.css";
 import App from "./App";
 
-import { store } from "./app/store";
+import { store, persistor } from "./app/store";
 import { Provider } from "react-redux";
 
-// import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
@@ -15,52 +16,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
-      </BrowserRouter>
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
-
-// import ErrorPage from "./pages/error.page";
-// import Login from "./pages/login.page";
-// import DashboardPage from "./pages/dashboard.page";
-// import EventsPage from "./pages/events.page";
-// import EventPage from "./pages/event.page";
-// import CataloguePage from "./pages/catalog.page";
-// import SignupPage from "./pages/signup.page";
-
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <App />,
-//     errorElement: <ErrorPage />,
-//     children: [
-//       { index: true, element: <Login /> },
-//       {
-//         path: "/dashboard",
-//         element: <DashboardPage />,
-//       },
-//       {
-//         path: "/events",
-//         element: <EventsPage />,
-//       },
-//       {
-//         path: "/events/:id",
-//         element: <EventPage />,
-//       },
-//       {
-//         path: "/catalogue",
-//         element: <CataloguePage />,
-//       },
-//       {
-//         path: "/signup",
-//         element: <SignupPage />,
-//       },
-//     ],
-//   },
-// ]);
-
-// <RouterProvider router={router} />

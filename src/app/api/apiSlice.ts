@@ -13,17 +13,21 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+const getAccessToken = (data: string) => {
+  return data.match(/(?<=s_token\":\").+(?=\"(?=,))/);
+};
+
 const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 403) {
-    console.log("sending refresh token");
     // send refresh token to get a new access token
     const refreshResult = await baseQuery("/refresh", api, extraOptions);
     if (refreshResult?.data) {
       const user = api.getState().auth.user;
       // set new access token
-      api.dispatch(setCredentials({ refreshResult, user }));
+      var accessToken = getAccessToken(JSON.stringify(refreshResult.data));
+      api.dispatch(setCredentials({ accessToken, user }));
       // retry original request
       result = await baseQuery(args, api, extraOptions);
     } else {

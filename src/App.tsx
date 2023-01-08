@@ -6,6 +6,7 @@ import SignupPage from "./pages/signup.page";
 
 import RequireAuth from "./features/auth/RequireAuth";
 import DashboardPage from "./pages/dashboard.page";
+import EventsList from "./features/events/Events";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
 
         <Route element={<RequireAuth />}>
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="events" element={<EventsList />} />
         </Route>
       </Route>
     </Routes>
