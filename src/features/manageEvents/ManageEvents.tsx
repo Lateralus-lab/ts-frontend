@@ -1,4 +1,4 @@
-import { useGetManageEventsQuery } from "./manageEventsApiSlice";
+import { useGetEventsQuery } from "./manageEventsApiSlice";
 import { Link } from "react-router-dom";
 
 import Spinner from "../../components/Spinner";
@@ -18,7 +18,7 @@ const ManageEvents = () => {
     isSuccess,
     isError,
     error,
-  } = useGetManageEventsQuery(null);
+  } = useGetEventsQuery(null);
 
   let content: any;
 

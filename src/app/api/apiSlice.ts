@@ -18,16 +18,14 @@ const baseQuery = fetchBaseQuery({
 });
 
 const getAccessToken = (data: string) => {
-  var resultToken = data.match(/(?<=s_token":").+(?="(?=,))/)?.toString();
-  if (resultToken === undefined) return null;
-  return resultToken;
+  var tokenMatch = data.match(/(?<=s_token":").+(?="(?=,))/)?.toString();
+  if (tokenMatch === undefined) return null;
+  return tokenMatch;
 };
 
-const baseQueryWithReauth = async (
-  args: string | FetchArgs,
-  api: any,
-  extraOptions: any
-) => {
+// args: string | FetchArgs,
+
+const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
   console.log(typeof extraOptions);
   let result = await baseQuery(args, api, extraOptions);
 

@@ -4,6 +4,7 @@ export const eventsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getEvents: builder.query({
       query: () => "/events",
+      keepUnusedDataFor: 5,
     }),
   }),
 });
