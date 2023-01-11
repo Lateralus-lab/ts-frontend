@@ -7,7 +7,10 @@ import Event from "./features/allEvents/Event";
 
 import RequireAuth from "./features/auth/RequireAuth";
 import DashboardPage from "./pages/dashboard.page";
+<<<<<<< HEAD
 import ManageEvents from "./features/manageEvents/ManageEvents";
+=======
+>>>>>>> parent of f5d5a3b (fixed authentication bug)
 
 const App = () => {
   return (
@@ -19,7 +22,10 @@ const App = () => {
 
         <Route element={<RequireAuth />}>
           <Route path="dashboard" element={<DashboardPage />} />
+<<<<<<< HEAD
           <Route path="admin/manage-events" element={<ManageEvents />} />
+=======
+>>>>>>> parent of f5d5a3b (fixed authentication bug)
         </Route>
       </Route>
     </Routes>

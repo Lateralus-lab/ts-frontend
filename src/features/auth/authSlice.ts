@@ -22,7 +22,13 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action: PayloadAction<Payload>) => {
       const { email, accessToken } = action.payload;
+<<<<<<< HEAD
       state.email = email;
+=======
+      console.log(action.payload);
+      console.log("setCredentials", email, accessToken);
+      state.user = email;
+>>>>>>> parent of f5d5a3b (fixed authentication bug)
       state.token = accessToken;
     },
     logOut: (state) => {
