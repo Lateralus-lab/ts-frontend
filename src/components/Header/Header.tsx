@@ -1,19 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 
-import { useSelector } from "react-redux";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 import {
   selectCurrentToken,
   selectCurrentUser,
 } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../features/auth/authSlice";
+import { RootState } from "../../app/store";
+import { useLogOutMutation } from "../../features/auth/logoutApiSlice";
+
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const Header = () => {
-  const user = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
+  const user = useTypedSelector(selectCurrentUser);
+  const token = useTypedSelector(selectCurrentToken);
 
+  const [logOutUser] = useLogOutMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logOutUser(null);
+    dispatch(logOut());
+    navigate("/");
+    localStorage.setItem("persist", "false");
+  };
 
   const welcomeUser = user ? `Welcome, ${user}!` : null;
 
@@ -37,7 +49,7 @@ const Header = () => {
       <li>
         <button
           className="flex items-center hover:text-gray-600"
-          onClick={() => dispatch(logOut())}
+          onClick={handleLogout}
         >
           <FaSignOutAlt />
           <span className="ml-1">Logout</span>

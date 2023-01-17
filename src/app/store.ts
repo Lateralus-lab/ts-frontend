@@ -8,7 +8,6 @@ import { persistStore, persistReducer } from "redux-persist";
 
 const persistConfig = {
   key: "root",
-  version: 1,
   storage,
 };
 
@@ -27,5 +26,8 @@ export const store = configureStore({
     ),
   devTools: true,
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export const persistor = persistStore(store);

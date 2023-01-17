@@ -1,4 +1,4 @@
-import { useGetEventsQuery } from "./eventsApiSlice";
+import { useGetManageEventsQuery } from "./manageEventsApiSlice";
 import { Link } from "react-router-dom";
 
 import Spinner from "../../components/Spinner";
@@ -11,14 +11,14 @@ interface Events {
   mpaa_rating: string;
 }
 
-const EventList = () => {
+const ManageEvents = () => {
   const {
     data: events,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetEventsQuery(null);
+  } = useGetManageEventsQuery(null);
 
   let content: any;
 
@@ -27,7 +27,7 @@ const EventList = () => {
   } else if (isSuccess) {
     content = (
       <div className="px-4">
-        <h1 className="title">Events</h1>
+        <h1 className="title">Manage Events</h1>
 
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -84,4 +84,4 @@ const EventList = () => {
   return content;
 };
 
-export default EventList;
+export default ManageEvents;
