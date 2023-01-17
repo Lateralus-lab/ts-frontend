@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useGetEventsQuery } from "./manageEventsApiSlice";
+=======
+import { useGetManageEventsQuery } from "./manageEventsApiSlice";
+>>>>>>> auth_feature
 import { Link } from "react-router-dom";
 
 import Spinner from "../../components/Spinner";
@@ -18,7 +22,11 @@ const ManageEvents = () => {
     isSuccess,
     isError,
     error,
+<<<<<<< HEAD
   } = useGetEventsQuery(null);
+=======
+  } = useGetManageEventsQuery(null);
+>>>>>>> auth_feature
 
   let content: any;
 

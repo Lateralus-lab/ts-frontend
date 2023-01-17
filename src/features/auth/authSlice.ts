@@ -2,40 +2,34 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
 interface AuthState {
-  email: string | null;
-  token: string | null;
+    email: string | null;
+    token: string | null;
 }
 
 const initialState: AuthState = {
-  email: null,
-  token: null,
+    email: null,
+    token: null,
 };
 
 type Payload = {
-  email: string | null;
-  accessToken: string | null;
+    email: string | null;
+    accessToken: string | null;
 };
 
 const authSlice = createSlice({
-  name: "auth",
-  initialState: initialState,
-  reducers: {
-    setCredentials: (state, action: PayloadAction<Payload>) => {
-      const { email, accessToken } = action.payload;
-<<<<<<< HEAD
-      state.email = email;
-=======
-      console.log(action.payload);
-      console.log("setCredentials", email, accessToken);
-      state.user = email;
->>>>>>> parent of f5d5a3b (fixed authentication bug)
-      state.token = accessToken;
+    name: "auth",
+    initialState: initialState,
+    reducers: {
+        setCredentials: (state, action: PayloadAction<Payload>) => {
+            const { email, accessToken } = action.payload;
+            state.email = email;
+            state.token = accessToken;
+        },
+        logOut: (state) => {
+            state.email = null;
+            state.token = null;
+        },
     },
-    logOut: (state) => {
-      state.email = null;
-      state.token = null;
-    },
-  },
 });
 
 export const { setCredentials, logOut } = authSlice.actions;

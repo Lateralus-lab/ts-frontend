@@ -145,9 +145,13 @@ const Sidebar = () => {
                   clipRule="evenodd"
                 ></path>
               </svg>
+<<<<<<< HEAD
               <span className="flex-1 ml-3 whitespace-nowrap">
                 Upcoming Events
               </span>
+=======
+              <span className="flex-1 ml-3 whitespace-nowrap">Events</span>
+>>>>>>> auth_feature
             </Link>
           </li>
         </ul>

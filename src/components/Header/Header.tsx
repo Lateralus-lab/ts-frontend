@@ -8,8 +8,13 @@ import {
 } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../features/auth/authSlice";
+<<<<<<< HEAD
 import { useLogOutMutation } from "../../features/auth/logoutApiSlice";
 import { RootState } from "../../app/store";
+=======
+import { RootState } from "../../app/store";
+import { useLogOutMutation } from "../../features/auth/logoutApiSlice";
+>>>>>>> auth_feature
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -17,6 +22,7 @@ const Header = () => {
   const user = useTypedSelector(selectCurrentUser);
   const token = useTypedSelector(selectCurrentToken);
 
+<<<<<<< HEAD
   const [logOutMutation] = useLogOutMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,6 +31,16 @@ const Header = () => {
     await logOutMutation(null);
     dispatch(logOut());
     navigate("/");
+=======
+  const [logOutUser] = useLogOutMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logOutUser(null);
+    dispatch(logOut());
+    navigate("/");
+    localStorage.setItem("persist", "false");
+>>>>>>> auth_feature
   };
 
   const welcomeUser = user ? `Welcome, ${user}!` : null;
