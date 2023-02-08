@@ -6,8 +6,8 @@ interface Props {
   id?: string;
   className: string;
   type: string;
-  required: boolean;
-  placeholder: string;
+  required?: boolean;
+  placeholder?: string;
   errorMsg?: string;
   value: string;
   autoComplete?: string;
@@ -16,7 +16,7 @@ interface Props {
 
 const Input = forwardRef((props: Props, ref: LegacyRef<HTMLInputElement>) => {
   return (
-    <div className="mb-3">
+    <div className="mb-6">
       <label
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         htmlFor={props.name}
