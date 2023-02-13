@@ -1,4 +1,4 @@
-import { useGetEventsQuery } from "./eventsApiSlice";
+import { useGetManageEventsQuery } from "./eventsApiSlice";
 import { Link } from "react-router-dom";
 
 import Spinner from "../../components/Spinner";
@@ -11,14 +11,14 @@ interface Events {
   mpaa_rating: string;
 }
 
-const EventList = () => {
+const ManageEventList = () => {
   const {
     data: events,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetEventsQuery("getEvents");
+  } = useGetManageEventsQuery("getManageEvents");
 
   let content: any;
 
@@ -84,4 +84,4 @@ const EventList = () => {
   return content;
 };
 
-export default EventList;
+export default ManageEventList;

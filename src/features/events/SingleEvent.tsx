@@ -1,16 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEvent } from "./eventSlice";
 
-interface Event {
-  id: number;
-  title: string;
-  release_date: string;
-  runtime: number;
-  mpaa_rating: string;
-  description: string;
-  image: string;
-  genres: Genres[];
-}
+import Spinner from "../../components/Spinner";
 
 interface Genres {
   checked: boolean;
@@ -18,36 +11,27 @@ interface Genres {
   id: number;
 }
 
-const Event = () => {
-  const [event, setEvent] = useState<Event>();
+const SingleEvent = () => {
   const { id } = useParams();
+  const { event, error, isLoading } = useSelector((state: any) => state.event);
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
+    dispatch(fetchEvent(id));
+  }, [dispatch, id]);
 
-    const options = {
-      method: "GET",
-      headers,
-    };
+  if (isLoading) return <Spinner />;
+  if (error) return <div>{error}</div>;
 
-    fetch(`${id}`, options)
-      .then((res) => res.json())
-      .then((data) => {
-        setEvent(data);
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
-
-  if (event?.genres) {
-    event.genres = Object.values(event.genres);
-  } else {
-    if (event !== undefined) {
-      event.genres = [];
-    }
+  if (!event) {
+    return (
+      <section>
+        <h2>Event not found!</h2>
+      </section>
+    );
   }
 
-  const renderedGenres = event?.genres.map((g: Genres) => (
+  const renderGenres = event?.genres.map((g: Genres) => (
     <span
       className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
       key={g.genre}
@@ -56,7 +40,7 @@ const Event = () => {
     </span>
   ));
 
-  const renderedImage = event?.image !== "" && (
+  const renderImage = event?.image !== "" && (
     <div className="mb-3">
       <img
         src={`https://image.tmdb.org/t/p/w200/${event?.image}`}
@@ -78,13 +62,13 @@ const Event = () => {
           <div>Runtime: {event?.runtime}</div>
           <div>Rating: {event?.mpaa_rating}</div>
         </div>
-        {renderedGenres}
+        {renderGenres}
         <hr className="mb-2 mt-2" />
-        {renderedImage}
+        {renderImage}
         <div>{event?.description}</div>
       </div>
     </div>
   );
 };
 
-export default Event;
+export default SingleEvent;
