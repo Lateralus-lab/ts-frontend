@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 
 interface Event {
   id: number;
@@ -72,3 +73,5 @@ const eventSlice = createSlice({
 });
 
 export const { reducer: eventReducer } = eventSlice;
+
+export const selectCurrentEvent = (state: RootState) => state.event;

@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchEvent } from "./eventSlice";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { fetchEvent, selectCurrentEvent } from "./eventSlice";
 
 import Spinner from "../../components/Spinner";
+import { RootState } from "../../app/store";
+
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 interface Genres {
   checked: boolean;
@@ -13,7 +16,7 @@ interface Genres {
 
 const SingleEvent = () => {
   const { id } = useParams();
-  const { event, error, isLoading } = useSelector((state: any) => state.event);
+  const { event, error, isLoading } = useTypedSelector(selectCurrentEvent);
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
@@ -49,7 +52,7 @@ const SingleEvent = () => {
     </div>
   );
 
-  return (
+  const content = (
     <div className="px-4">
       <h2 className="title">Event</h2>
 
@@ -69,6 +72,8 @@ const SingleEvent = () => {
       </div>
     </div>
   );
+
+  return content;
 };
 
 export default SingleEvent;

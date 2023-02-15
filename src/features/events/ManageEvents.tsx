@@ -11,7 +11,7 @@ interface Events {
   mpaa_rating: string;
 }
 
-const ManageEventList = () => {
+const ManageEventList = (): JSX.Element | null => {
   const {
     data: events,
     isLoading,
@@ -20,7 +20,7 @@ const ManageEventList = () => {
     error,
   } = useGetManageEventsQuery("getManageEvents");
 
-  let content: any;
+  let content: JSX.Element | null = null;
 
   if (isLoading) {
     content = <Spinner />;
