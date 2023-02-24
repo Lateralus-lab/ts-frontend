@@ -18,6 +18,7 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errMsg, setErrMsg] = useState<string>("");
+  const [errVariant, setErrVariant] = useState<string>("hidden");
 
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
@@ -40,10 +41,13 @@ const Login = () => {
     } catch (err: any) {
       if (err.status === 400) {
         setErrMsg("Invalid email or password");
+        setErrVariant("danger");
       } else if (err.status === 401) {
         setErrMsg("Unauthorized");
+        setErrVariant("danger");
       } else {
         setErrMsg("Login failed");
+        setErrVariant("danger");
       }
 
       errRef?.current?.focus();
@@ -94,7 +98,7 @@ const Login = () => {
         <button className="btn" type="submit">
           Login
         </button>
-        <Alert message={errMsg} variant={"danger"} />
+        <Alert message={errMsg} variant={errVariant} />
       </form>
     </div>
   );

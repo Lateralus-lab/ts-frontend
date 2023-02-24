@@ -18,13 +18,13 @@ const EventList = (): JSX.Element | null => {
     isSuccess,
     isError,
     error,
-  } = useGetEventsQuery("getEvents");
+  } = useGetEventsQuery("events");
 
   let content: JSX.Element | null = null;
 
   if (isLoading) {
     content = <Spinner />;
-  } else if (isSuccess) {
+  } else if (isSuccess && events) {
     content = (
       <div className="px-4">
         <h1 className="title">Events</h1>
