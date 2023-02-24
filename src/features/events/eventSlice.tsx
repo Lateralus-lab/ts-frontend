@@ -56,19 +56,26 @@ const eventSlice = createSlice({
   name: "event",
   initialState,
   reducers: {},
-  extraReducers: {
-    [fetchEvent.pending.type]: (state) => {
-      state.isLoading = true;
-    },
-    [fetchEvent.fulfilled.type]: (state, action: PayloadAction<Event>) => {
-      state.event = action.payload;
-      state.isLoading = false;
-      state.error = null;
-    },
-    [fetchEvent.rejected.type]: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
+  extraReducers: (builder: any) => {
+    builder
+      .addCase(fetchEvent.pending, (state: any) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        fetchEvent.fulfilled,
+        (state: any, action: PayloadAction<Event>) => {
+          state.event = action.payload;
+          state.isLoading = false;
+          state.error = null;
+        }
+      )
+      .addCase(
+        fetchEvent.rejected,
+        (state: any, action: PayloadAction<string>) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        }
+      );
   },
 });
 
