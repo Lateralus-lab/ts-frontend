@@ -1,14 +1,13 @@
 type AlertProps = {
-  message: string;
-  variant: "success" | "danger" | "warning";
+  message: string | undefined | null;
+  variant: string | undefined;
 };
 
-const Alert = (props: AlertProps) => {
+const Alert = (props: AlertProps): JSX.Element | null => {
   const { message, variant } = props;
 
   const content = message ? (
-    // <div className={`alert-${variant}`}>
-    <div className="alert-danger">
+    <div className={`alert-${variant}`}>
       <svg
         className="flex-shrink-0 inline w-5 h-5 mr-3"
         aria-hidden="true"

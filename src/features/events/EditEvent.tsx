@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { RootState } from "../../app/store";
 import { selectCurrentToken } from "../auth/authSlice";
+
+import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
+import { fetchGenres, selectGenres } from "./genresSlice";
+import { RootState } from "../../app/store";
 
 import Input from "../../components/Form/Input";
 import Select from "../../components/Form/Select";
@@ -42,6 +44,9 @@ interface Check {
 const EditEvent = () => {
   const navigate = useNavigate();
   const token = useTypedSelector(selectCurrentToken);
+  const eventGenres = useTypedSelector(selectGenres);
+
+  const dispatch = useDispatch<any>();
 
   const mpaaOptions = [
     { id: "G", value: "G" },
@@ -53,6 +58,11 @@ const EditEvent = () => {
   ];
 
   const [event, setEvent] = useState<Event>(initialEvent);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const hasError = (key: any) => {
+    return errors.indexOf(key) !== -1;
+  };
 
   let { id } = useParams<{ id: string }>();
 
@@ -81,32 +91,18 @@ const EditEvent = () => {
         genres_array: [Array(13).fill(false)],
       });
 
-      const headers = new Headers();
-      headers.append("Content-Type", "application/json");
+      dispatch(fetchGenres());
+      const checks: Check[] = [];
 
-      const requestOptions = {
-        method: "GET",
-        headers: headers,
-      };
+      eventGenres.genres.forEach((g: any) => {
+        checks.push({ id: g.id, checked: false, genre: g.genre });
+      });
 
-      fetch(`/genres`, requestOptions)
-        .then((response) => response.json())
-        .then((data) => {
-          const checks: Check[] = [];
-
-          data.forEach((g: any) => {
-            checks.push({ id: g.id, checked: false, genre: g.genre });
-          });
-
-          setEvent((e) => ({
-            ...e,
-            genres: checks,
-            genres_array: [],
-          }));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      setEvent((m) => ({
+        ...m,
+        genres: checks,
+        genres_array: [],
+      }));
     } else {
       // editing an existing event
     }
@@ -114,6 +110,29 @@ const EditEvent = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    let errors: string[] = [];
+    let required = [
+      { field: event.title, name: "Title" },
+      { field: event.release_date, name: "release_date" },
+      { field: event.runtime, name: "runtime" },
+      { field: event.description, name: "description" },
+      { field: event.mpaa_rating, name: "mpaa_rating" },
+    ];
+
+    required.forEach(function (obj) {
+      if (obj.field === "") {
+        errors.push(obj.name);
+      }
+    });
+
+    if (event.genres_array.length === 0) {
+      alert("Please select at least one genre");
+    }
+
+    setErrors(errors);
+
+    if (errors.length > 0) return false;
   };
 
   const handleChange =
@@ -165,12 +184,12 @@ const EditEvent = () => {
     </>
   );
 
+  // <pre>{JSON.stringify(event, null, 3)}</pre>
+
   return (
     <div className="px-4">
       <h2 className="title">Edit Event</h2>
-      <pre>{JSON.stringify(event, null, 3)}</pre>
       <hr className="my-3" />
-
       <form onSubmit={handleSubmit}>
         <input type="hidden" name="id" value={event.id} id="id"></input>
 
@@ -179,6 +198,8 @@ const EditEvent = () => {
           title={"Title"}
           type={"text"}
           name={"title"}
+          errorDiv={hasError("Title") ? "danger" : "hidden"}
+          errorMsg={hasError("Title") ? "Please enter a title" : null}
           value={event.title}
           onChange={handleChange("title")}
         />
@@ -188,6 +209,10 @@ const EditEvent = () => {
           title={"Release Date"}
           type={"date"}
           name={"release_date"}
+          errorDiv={hasError("release_date") ? "danger" : "hidden"}
+          errorMsg={
+            hasError("release_date") ? "Please enter a release date" : null
+          }
           value={event.release_date}
           onChange={handleChange("release_date")}
         />
@@ -197,6 +222,8 @@ const EditEvent = () => {
           title={"Runtime"}
           type={"text"}
           name={"runtime"}
+          errorDiv={hasError("runtime") ? "danger" : "hidden"}
+          errorMsg={hasError("runtime") ? "Please enter a runtime" : null}
           value={event.runtime.toString()}
           onChange={handleChange("release_date")}
         />
@@ -206,6 +233,8 @@ const EditEvent = () => {
           name={"mpaa_rating"}
           options={mpaaOptions}
           placeHolder={"Select MPAA Rating"}
+          errorDiv={hasError("mpaa_rating") ? "danger" : "hidden"}
+          errorMsg={hasError("mpaa_rating") ? "Please choose" : null}
           value={event.runtime.toString()}
           onChange={handleChange("mpaa_rating")}
         />
@@ -214,14 +243,24 @@ const EditEvent = () => {
           title={"Description"}
           name={"description"}
           value={event.description}
+          errorDiv={hasError("description") ? "danger" : "hidden"}
+          errorMsg={
+            hasError("description") ? "Please enter a description" : null
+          }
           rows={3}
           onChange={handleChange("description")}
         />
 
         <hr />
 
-        <h3>Genres</h3>
+        <h3 className="my-2 text-3xl font-bold dark:text-white">Genres</h3>
         {renderGenres}
+
+        <hr className="my-3" />
+
+        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+          Save
+        </button>
       </form>
     </div>
   );

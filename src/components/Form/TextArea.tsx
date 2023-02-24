@@ -1,8 +1,12 @@
+import Alert from "../Alert";
+
 interface Props {
   name: string;
   title: string;
   id?: string;
   value: string;
+  errorDiv?: string | undefined;
+  errorMsg?: string | null;
   rows: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
@@ -24,6 +28,7 @@ const TextArea = (props: Props) => {
         rows={props.rows}
         onChange={props.onChange}
       />
+      <Alert message={props.errorMsg} variant={props.errorDiv} />
     </div>
   );
 };

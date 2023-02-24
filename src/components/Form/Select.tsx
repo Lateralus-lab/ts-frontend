@@ -1,9 +1,13 @@
+import Alert from "../Alert";
+
 interface Props {
   name: string;
   title: string;
   id?: string;
   value: string;
   placeHolder: string;
+  errorDiv?: string | undefined;
+  errorMsg?: string | null;
   options: any[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -38,6 +42,7 @@ const Select = (props: Props) => {
           );
         })}
       </select>
+      <Alert message={props.errorMsg} variant={props.errorDiv} />
     </div>
   );
 };

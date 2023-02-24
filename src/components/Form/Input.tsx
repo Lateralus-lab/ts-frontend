@@ -1,4 +1,5 @@
 import { forwardRef, LegacyRef } from "react";
+import Alert from "../Alert";
 
 interface Props {
   title?: string;
@@ -8,7 +9,8 @@ interface Props {
   type: string;
   required?: boolean;
   placeholder?: string;
-  errorMsg?: string;
+  errorDiv?: string;
+  errorMsg?: string | null;
   value: string;
   autoComplete?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -34,7 +36,7 @@ const Input = forwardRef((props: Props, ref: LegacyRef<HTMLInputElement>) => {
         autoComplete={props.autoComplete}
         onChange={props.onChange}
       />
-      <div>{props.errorMsg}</div>
+      <Alert message={props.errorMsg} variant={props.errorDiv} />
     </div>
   );
 });

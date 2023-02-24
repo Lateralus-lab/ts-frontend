@@ -60,8 +60,13 @@ const Header = () => {
 
   return (
     <header className="flex justify-between py-6 mb-[60px] border-b">
-      <div>
-        <div>TicketService</div>
+      <div className="items-center">
+        <h1 className="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-lg lg:text-2xl dark:text-white">
+          Rave{" "}
+          <mark className="px-2 text-white bg-blue-600 rounded dark:bg-blue-500">
+            Nexus
+          </mark>
+        </h1>
       </div>
 
       <div className="flex max-w-xl gap-6 items-center">

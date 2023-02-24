@@ -3,6 +3,7 @@ import { apiSlice } from "./api/apiSlice";
 
 import authReducer from "../features/auth/authSlice";
 import { eventReducer } from "../features/events/eventSlice";
+import genresReducer from "../features/events/genresSlice";
 
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
@@ -16,6 +17,7 @@ const reducers = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
   auth: authReducer,
   event: eventReducer,
+  genres: genresReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
