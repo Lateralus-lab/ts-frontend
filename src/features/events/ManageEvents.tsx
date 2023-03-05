@@ -18,7 +18,7 @@ const ManageEventList = (): JSX.Element | null => {
     isSuccess,
     isError,
     error,
-  } = useGetManageEventsQuery("getManageEvents");
+  } = useGetManageEventsQuery("admin/events");
 
   let content: JSX.Element | null = null;
 

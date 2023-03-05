@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  combineReducers,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
 interface Event {
@@ -18,9 +23,24 @@ interface Genres {
   id: number;
 }
 
-export const fetchEvent = createAsyncThunk<any, any, any>(
+interface Genre {
+  id: number;
+  genre: string;
+}
+
+interface GenresState {
+  genres: Genre[];
+}
+
+interface EventState {
+  event: Event;
+  error: string | null;
+  isLoading: boolean;
+}
+
+export const fetchEvent = createAsyncThunk<Event, string | undefined, any>(
   "event/fetchEvent",
-  async (eventId: string, { rejectWithValue }) => {
+  async (eventId: string | undefined, { rejectWithValue }) => {
     try {
       const res = await fetch(`${eventId}`);
       const data = await res.json();
@@ -31,11 +51,14 @@ export const fetchEvent = createAsyncThunk<any, any, any>(
   }
 );
 
-interface EventState {
-  event: Event;
-  error: string | null;
-  isLoading: boolean;
-}
+export const fetchGenres = createAsyncThunk<Genre[]>(
+  "genres/fetchGenres",
+  async () => {
+    const response = await fetch("/genres");
+    const data = await response.json();
+    return data;
+  }
+);
 
 const initialState: EventState = {
   event: {
@@ -79,6 +102,30 @@ const eventSlice = createSlice({
   },
 });
 
-export const { reducer: eventReducer } = eventSlice;
+const genresInitialState: GenresState = {
+  genres: [],
+};
 
-export const selectCurrentEvent = (state: RootState) => state.event;
+const genresSlice = createSlice({
+  name: "genres",
+  initialState: genresInitialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(
+      fetchGenres.fulfilled,
+      (state, action: PayloadAction<Genre[]>) => {
+        state.genres = action.payload;
+      }
+    );
+  },
+});
+
+const fetchEventReducer = combineReducers({
+  event: eventSlice.reducer,
+  genres: genresSlice.reducer,
+});
+
+export const selectCurrentEvent = (state: RootState) => state.fetchEvent.event;
+export const selectGenres = (state: RootState) => state.fetchEvent.genres;
+
+export default fetchEventReducer;

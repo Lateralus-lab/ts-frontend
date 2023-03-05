@@ -11,7 +11,7 @@ interface Props {
   placeholder?: string;
   errorDiv?: string;
   errorMsg?: string | null;
-  value: string;
+  value: string | number;
   autoComplete?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

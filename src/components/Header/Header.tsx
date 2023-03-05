@@ -14,7 +14,7 @@ import { useLogOutMutation } from "../../features/auth/logoutApiSlice";
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const Header = () => {
-  const user = useTypedSelector(selectCurrentUser);
+  const userEmail = useTypedSelector(selectCurrentUser);
   const token = useTypedSelector(selectCurrentToken);
 
   const [logOutMutation] = useLogOutMutation();
@@ -27,7 +27,7 @@ const Header = () => {
     navigate("/");
   };
 
-  const welcomeUser = user ? `Welcome, ${user}!` : null;
+  const welcomeUser = userEmail ? `Welcome, ${userEmail}!` : null;
 
   const isUserLoggedinContent = !token ? (
     <ul className="flex gap-4">

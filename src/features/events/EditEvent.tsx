@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { selectCurrentToken } from "../auth/authSlice";
 
 import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
-import { fetchGenres, selectGenres } from "./genresSlice";
+import { fetchGenres, selectGenres } from "./fetchEventSlice";
 import { RootState } from "../../app/store";
 
 import Input from "../../components/Form/Input";
@@ -17,7 +17,7 @@ interface Event {
   id: number;
   title: string;
   release_date: string;
-  runtime: string;
+  runtime: number;
   mpaa_rating: string;
   description: string;
   genres: any[];
@@ -28,7 +28,7 @@ const initialEvent: Event = {
   id: 0,
   title: "",
   release_date: "",
-  runtime: "",
+  runtime: 0,
   mpaa_rating: "",
   description: "",
   genres: [],
@@ -43,6 +43,7 @@ interface Check {
 
 const EditEvent = () => {
   const navigate = useNavigate();
+
   const token = useTypedSelector(selectCurrentToken);
   const eventGenres = useTypedSelector(selectGenres);
 
@@ -84,7 +85,7 @@ const EditEvent = () => {
         id: 0,
         title: "",
         release_date: "",
-        runtime: "",
+        runtime: 0,
         mpaa_rating: "",
         description: "",
         genres: [],
@@ -98,8 +99,8 @@ const EditEvent = () => {
         checks.push({ id: g.id, checked: false, genre: g.genre });
       });
 
-      setEvent((m) => ({
-        ...m,
+      setEvent((e) => ({
+        ...e,
         genres: checks,
         genres_array: [],
       }));
@@ -108,7 +109,7 @@ const EditEvent = () => {
     }
   }, [eventId, token, navigate]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let errors: string[] = [];
@@ -133,6 +134,50 @@ const EditEvent = () => {
     setErrors(errors);
 
     if (errors.length > 0) return false;
+
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.set("Authorization", `Bearer ${token}`);
+
+    let method = "PUT";
+
+    if (event.id > 0) {
+      method = "PATCH";
+    }
+
+    const requestBody = event;
+
+    requestBody.release_date = new Date(event.release_date).toISOString();
+    if (typeof event.runtime === "string") {
+      requestBody.runtime = parseInt(event.runtime, 10);
+    }
+
+    let requestOptions: any = {
+      body: JSON.stringify(requestBody),
+      method: method,
+      headers: headers,
+      credentials: "include",
+    };
+
+    fetch(`/admin/events/${event.id}`, requestOptions)
+      .then((resp) => {
+        console.log(`Response status: ${resp.status}`);
+        if (resp.status === 403) {
+          console.log("yes");
+          fetch(`/refresh`);
+        }
+        resp.json();
+      })
+      .then((data) => {
+        // if (data.error) {
+        //   console.log(data.error);
+        // } else {
+        //   navigate("/admin/events");
+        // }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleChange =
@@ -224,7 +269,7 @@ const EditEvent = () => {
           name={"runtime"}
           errorDiv={hasError("runtime") ? "danger" : "hidden"}
           errorMsg={hasError("runtime") ? "Please enter a runtime" : null}
-          value={event.runtime.toString()}
+          value={event.runtime}
           onChange={handleChange("release_date")}
         />
 

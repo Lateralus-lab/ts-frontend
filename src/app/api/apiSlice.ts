@@ -7,6 +7,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }: any) => {
     const token = getState().auth.token;
     if (token) {
+      headers.append("Content-Type", "application/json");
       headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
@@ -31,6 +32,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
       const email = api.getState().auth.user;
       // set new access token
       var accessToken = getAccessToken(JSON.stringify(refreshResult.data));
+      console.log("refresh token result", accessToken);
       api.dispatch(setCredentials({ accessToken, email }));
       // retry original request
       result = await baseQuery(args, api, extraOptions);

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { fetchEvent, selectCurrentEvent } from "./eventSlice";
+import { fetchEvent, selectCurrentEvent } from "./fetchEventSlice";
 
 import Spinner from "../../components/Spinner";
 import { RootState } from "../../app/store";
