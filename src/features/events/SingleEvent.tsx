@@ -34,12 +34,12 @@ const SingleEvent = () => {
     );
   }
 
-  const renderGenres = event?.genres.map((g: Genres) => (
+  const renderGenres = event?.genres?.map((g: Genres) => (
     <span
       className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
-      key={g.genre}
+      key={g?.genre}
     >
-      {g.genre}
+      {g?.genre}
     </span>
   ));
 

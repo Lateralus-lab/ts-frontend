@@ -5,6 +5,7 @@ import { selectCurrentToken } from "../auth/authSlice";
 import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
 import { fetchGenres, selectGenres } from "./fetchEventSlice";
 import { RootState } from "../../app/store";
+import { useAddEventMutation } from "./eventsApiSlice";
 
 import Input from "../../components/Form/Input";
 import Select from "../../components/Form/Select";
@@ -48,6 +49,8 @@ const EditEvent = () => {
   const eventGenres = useTypedSelector(selectGenres);
 
   const dispatch = useDispatch<any>();
+
+  const [addEvent, { isLoading }] = useAddEventMutation();
 
   const mpaaOptions = [
     { id: "G", value: "G" },
@@ -106,6 +109,42 @@ const EditEvent = () => {
       }));
     } else {
       // editing an existing event
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      headers.append("Authorization", `Bearer ${token}`);
+
+      const requestOptions = {
+        method: "GET",
+        headers,
+      };
+
+      fetch(`/admin/events/${eventId}`, requestOptions)
+        .then((response) => {
+          if (response.status !== 200) {
+            console.log("Invalid response code: " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          data.event.release_date = new Date(data.event.release_date)
+            .toISOString()
+            .split("T")[0];
+
+          const checks: any[] = [];
+
+          data.genres.forEach((g: any) => {
+            if (data.event.genres_array.indexOf(g.id) !== -1) {
+              checks.push({ id: g.id, checked: true, genre: g.genre });
+            } else {
+              checks.push({ id: g.id, checked: false, genre: g.genre });
+            }
+          });
+
+          setEvent({ ...data.event, genres: checks });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [eventId, token, navigate]);
 
@@ -135,10 +174,6 @@ const EditEvent = () => {
 
     if (errors.length > 0) return false;
 
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.set("Authorization", `Bearer ${token}`);
-
     let method = "PUT";
 
     if (event.id > 0) {
@@ -153,31 +188,20 @@ const EditEvent = () => {
     }
 
     let requestOptions: any = {
-      body: JSON.stringify(requestBody),
+      body: requestBody,
       method: method,
-      headers: headers,
       credentials: "include",
     };
 
-    fetch(`/admin/events/${event.id}`, requestOptions)
-      .then((resp) => {
-        console.log(`Response status: ${resp.status}`);
-        if (resp.status === 403) {
-          console.log("yes");
-          fetch(`/refresh`);
-        }
-        resp.json();
-      })
-      .then((data) => {
-        // if (data.error) {
-        //   console.log(data.error);
-        // } else {
-        //   navigate("/admin/events");
-        // }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(requestOptions);
+
+    // for testing purposes
+    try {
+      await addEvent(requestOptions);
+      navigate("/admin/events");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleChange =
@@ -227,6 +251,14 @@ const EditEvent = () => {
         />
       ))}
     </>
+  );
+
+  const renderButton = isLoading ? (
+    <div>Loading</div>
+  ) : (
+    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+      Save
+    </button>
   );
 
   // <pre>{JSON.stringify(event, null, 3)}</pre>
@@ -302,10 +334,7 @@ const EditEvent = () => {
         {renderGenres}
 
         <hr className="my-3" />
-
-        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-          Save
-        </button>
+        {renderButton}
       </form>
     </div>
   );

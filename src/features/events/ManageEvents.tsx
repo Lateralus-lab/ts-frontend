@@ -60,14 +60,14 @@ const ManageEventList = (): JSX.Element | null => {
                     className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     scope="row"
                   >
-                    <Link to={`/events/${e.id}`}>{e.title}</Link>
+                    <Link to={`/admin/event/${e.id}`}>{e.title}</Link>
                   </th>
                   <td className="py-4 px-6">{e.release_date}</td>
                   <td className="py-4 px-6">{e.runtime}</td>
                   <td className="py-4 px-6">{e.mpaa_rating}</td>
                   <td className="py-4 px-6 text-right">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                      <Link to={`/events/${e.id}`}>Edit</Link>
+                      <Link to={`/admin/event/${e.id}`}>Edit</Link>
                     </span>
                   </td>
                 </tr>

@@ -20,6 +20,8 @@ const EventList = (): JSX.Element | null => {
     error,
   } = useGetEventsQuery("events");
 
+  console.log(events);
+
   let content: JSX.Element | null = null;
 
   if (isLoading) {

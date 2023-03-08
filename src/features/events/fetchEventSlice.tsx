@@ -113,7 +113,7 @@ const genresSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchGenres.fulfilled,
-      (state, action: PayloadAction<Genre[]>) => {
+      (state: any, action: PayloadAction<Genre[]>) => {
         state.genres = action.payload;
       }
     );
@@ -125,7 +125,9 @@ const fetchEventReducer = combineReducers({
   genres: genresSlice.reducer,
 });
 
-export const selectCurrentEvent = (state: RootState) => state.fetchEvent.event;
-export const selectGenres = (state: RootState) => state.fetchEvent.genres;
+export const selectCurrentEvent = (state: RootState) =>
+  (state.fetchEvent as any).event;
+export const selectGenres = (state: RootState) =>
+  (state.fetchEvent as any).genres;
 
 export default fetchEventReducer;

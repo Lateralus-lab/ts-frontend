@@ -21,7 +21,8 @@ const App = () => {
         <Route element={<RequireAuth />}>
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="admin/events" element={<ManageEventList />} />
-          <Route path="admin/events/0" element={<EditEvent />} />
+          <Route path="admin/event/0" element={<EditEvent />} />
+          <Route path="admin/event/:id" element={<EditEvent />} />
         </Route>
       </Route>
     </Routes>
